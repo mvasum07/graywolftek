@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graywolftek | Leading IT & Remote Engineering Solutions</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Vanilla Tilt for 3D Effects -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    <!-- Use Inter font family -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            /* Fallback */
+            background-image: radial-gradient(at 0% 0%, hsla(253, 16%, 7%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(225, 39%, 30%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(339, 49%, 30%, 1) 0, transparent 50%);
+            background-attachment: fixed;
+            /* Parallax-like background */
+            color: #f3f4f6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ORBAI-Style Variables */
+        :root {
+            --color-primary-accent: #818cf8;
+            /* Lighter Indigo for dark mode */
+            --color-secondary-accent: #c084fc;
+            /* Purple */
+            --color-dark-text: #f3f4f6;
+            /* Light text for dark mode */
+            --color-glass-border: rgba(255, 255, 255, 0.1);
+            --color-glass-bg: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Glassmorphism Utility */
+        .glass-panel {
+            background: var(--color-glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--color-glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Glowing Text */
+        .text-glow {
+            text-shadow: 0 0 20px rgba(129, 140, 248, 0.5), 0 0 40px rgba(129, 140, 248, 0.3);
+        }
+
+        .section-separator::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-primary-accent), var(--color-secondary-accent));
+            margin: 1rem auto 3rem;
+            border-radius: 9999px;
+            box-shadow: 0 0 10px var(--color-primary-accent);
+        }
+
+        .cta-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(79, 70, 229, 0.4);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 0 30px rgba(124, 58, 237, 0.6);
+        }
+
+        /* 3D Card Effect - Dark Mode */
+        .card-3d-effect {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+        }
+
+        /* Scroll Reveal Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Animation */
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+
+        /* Style for the small social icons */
+        .social-icon-btn {
+            @apply w-8 h-8 flex items-center justify-center bg-white/10 border border-white/20 rounded-lg hover:bg-white/20 transition duration-150;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon-btn:hover {
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.6), 0 0 30px rgba(129, 140, 248, 0.4);
+            border-color: var(--color-primary-accent);
+            transform: translateY(-2px);
+        }
+
+        .social-icon-btn:hover i {
+            color: var(--color-primary-accent) !important;
+        }
+
+        /* Custom style for team card names/titles to mimic the reference image */
+        .team-name {
+            @apply text-xl font-semibold text-white;
+        }
+
+        .team-title {
+            @apply text-sm text-gray-400 font-normal mt-1;
+        }
+
+        /* --- THE NEW FIX FOR IMAGE SIZING --- */
+        .team-image-container {
+            /* Forces the container to reserve space for a perfect square (1:1 aspect ratio) */
+            /* Padding-bottom is 100% of the container's width, forcing a square height. */
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+            overflow: hidden;
+            /* Match the large rounding of the cards */
+            border-radius: 1.5rem;
+        }
+
+        /* This style is applied to the image (img) */
+        .team-image-fit {
+            /* Absolutely position the image to fill the guaranteed square container */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Fills the container, cropping the edges if the source image aspect ratio is different */
+            object-fit: cover;
+        }
+    </style>
+    <!-- Lucide icons for a modern look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body class="antialiased">
+
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 glass-panel shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+
+                <!-- Company Logo and Name -->
+                <a href="#" class="flex items-center space-x-2">
+                    <!-- LOGO PATH: assets/images/logo.png -->
+                    <img src="assets/images/logo.png" alt="Graywolftek Main Logo" class="h-12 w-auto" />
+                    <span class="text-xl font-extrabold tracking-wider text-white hidden sm:block">
+                        <span class="text-primary-accent text-glow">GRAY</span>WOLFTEK
+                    </span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#"
+                        class="text-sm font-medium text-gray-200 hover:text-primary-accent transition duration-150">Home</a>
+                    <a href="projects.html"
+                        class="text-sm font-medium text-gray-200 hover:text-primary-accent transition duration-150">Projects</a>
+                    <a href="#blog"
+                        class="text-sm font-medium text-gray-200 hover:text-primary-accent transition duration-150">Blog</a>
+                    <a href="#about"
+                        class="text-sm font-medium text-gray-200 hover:text-primary-accent transition duration-150">About
+                        Us</a>
+                    <!-- CTA kept separate from primary navigation links - Use Accent Color -->
+                    <a href="#contact"
+                        class="px-5 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-accent hover:opacity-90 transition duration-150 cta-button ml-8">
+                        Get Started
+                    </a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button"
+                    class="md:hidden text-gray-200 hover:text-primary-accent transition duration-150 p-2 rounded-lg"
+                    aria-label="Toggle menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel shadow-lg border-t border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <a href="#"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-white/10">Home</a>
+                <a href="projects.html"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-white/10">Projects</a>
+                <a href="#blog"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-white/10">Blog</a>
+                <a href="#about"
+                    class="block px-3 py-2 rounded-md text-base font-medium text-gray-200 hover:bg-white/10">About
+                    Us</a>
+                <a href="#contact"
+                    class="block w-full px-3 py-2 rounded-md text-base font-medium text-white bg-primary-accent hover:opacity-90 mt-2 cta-button">Get
+                    Started</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-28 text-center overflow-hidden">
+
+        <div class="max-w-4xl mx-auto px-4 relative z-20">
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-tight tracking-tight text-shadow-3d">
+                <span class="block text-white text-glow">Forge Your</span>
+                <span class="text-primary-accent block text-glow">High-Performing Remote Team</span>
+            </h1>
+            <p class="mt-6 text-xl text-gray-300 max-w-2xl mx-auto">
+                Graywolftek is the strategic partner for building, setting up, and managing elite remote engineering
+                teams in India, enabling sustained growth and innovation.
+            </p>
+            <div class="mt-10 flex justify-center space-x-4">
+                <a href="#services" class="px-8 py-3 text-lg font-medium rounded-lg text-white cta-button">
+                    Explore Solutions
+                </a>
+                <a href="#contact"
+                    class="px-8 py-3 text-lg font-medium rounded-lg text-white bg-white/10 border border-white/20 hover:bg-white/20 transition duration-150">
+                    Schedule a Call
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Blog Section -->
+    <section id="blog" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center section-separator">
+            <span class="text-sm font-semibold uppercase text-primary-accent">Insights</span>
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h2 class="text-4xl font-bold text-white mb-4 text-shadow-3d text-glow">Latest from the Graywolftek Blog
+            </h2>
+            <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-16">
+                Stay updated on remote team building, DevOps trends, and data center infrastructure best practices.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+                <!-- Blog Post 1 - Remote Teams -->
+                <div class="p-6 rounded-3xl overflow-hidden card-3d-effect" data-tilt data-tilt-max="5"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                    <img src="assets/images/remoteteam.gif" alt="Remote Team Strategy"
+                        class="w-16 h-16 mx-auto mb-4 object-contain">
+                    <div class="p-0 text-left mt-4">
+                        <span class="text-xs font-medium text-gray-400 uppercase">Remote Teams</span>
+                        <h3 class="text-xl font-semibold text-white mt-2 mb-3">5 Keys to Scaling Engineering Teams in
+                            India</h3>
+                        <p class="text-gray-400 text-sm line-clamp-3">
+                            Discover the essential strategies for successful talent sourcing, cultural integration, and
+                            infrastructure setup when building your remote presence.
+                        </p>
+                        <a href="blog-remote-teams.html"
+                            class="mt-4 inline-flex items-center text-primary-accent hover:opacity-80 font-medium text-sm">
+                            Read More <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Blog Post 2 - Infrastructure -->
+                <div class="p-6 rounded-3xl overflow-hidden card-3d-effect" data-tilt data-tilt-max="5"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                    <img src="assets/images/devopsteam.png" alt="DevOps and Infrastructure"
+                        class="w-16 h-16 mx-auto mb-4 object-contain">
+                    <div class="p-0 text-left mt-4">
+                        <span class="text-xs font-medium text-gray-400 uppercase">Infrastructure</span>
+                        <h3 class="text-xl font-semibold text-white mt-2 mb-3">The Future of Data Center
+                            Infrastructure</h3>
+                        <p class="text-gray-400 text-sm line-clamp-3">
+                            An analysis of turnkey deployment models, cloud integration, and the role of technologies
+                            like Red Hat CloudForms and Satellite in modernizing infrastructure.
+                        </p>
+                        <a href="blog-infrastructure.html"
+                            class="mt-4 inline-flex items-center text-primary-accent hover:opacity-80 font-medium text-sm">
+                            Read More <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Blog Post 3 - HR Management -->
+                <div class="p-6 rounded-3xl overflow-hidden card-3d-effect" data-tilt data-tilt-max="5"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.2">
+                    <img src="assets/images/agilehr.gif" alt="Agile HR Management"
+                        class="w-16 h-16 mx-auto mb-4 object-contain">
+                    <div class="p-0 text-left mt-4">
+                        <span class="text-xs font-medium text-gray-400 uppercase">HR & Management</span>
+                        <h3 class="text-xl font-semibold text-white mt-2 mb-3">Simplifying HR for Global Remote Teams
+                        </h3>
+                        <p class="text-gray-400 text-sm line-clamp-3">
+                            How to handle compliance, payroll, and benefits efficiently across borders to keep your
+                            remote staff focused and productive.
+                        </p>
+                        <a href="blog-hr-management.html"
+                            class="mt-4 inline-flex items-center text-primary-accent hover:opacity-80 font-medium text-sm">
+                            Read More <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Services Section (GIFs use assets/images/) -->
+    <section id="services" class="py-24 section-separator">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h2 class="text-4xl font-bold text-white mb-4 text-shadow-3d text-glow">Our Core Solutions</h2>
+            <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                We provide comprehensive services from talent acquisition to full-stack infrastructure and development.
+            </p>
+
+            <!-- Grid for Service Cards -->
+            <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                <!-- Service Card 1: Data Center Infrastructure -->
+                <div class="p-8 rounded-3xl card-3d-effect flex flex-col" data-tilt data-tilt-max="8"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
+                    <div class="text-center flex-grow">
+                        <!-- GIF Icon PATH: assets/images/datacenter.gif -->
+                        <img src="assets/images/datacenter.gif" alt="Data Center Infrastructure Icon"
+                            class="w-16 h-16 mx-auto mb-4 object-contain">
+                        <h3 class="text-xl font-semibold text-white mb-3">Data Center Infrastructure</h3>
+                        <p class="text-gray-400 text-sm">
+                            GrayWolfTek delivers complete data center infrastructure solutions—from planning to
+                            execution—with a focus on performance, reliability, and scalability. We specialize in
+                            turnkey deployments using advanced technologies like Red Hat CloudForms and Satellite.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-center mt-auto">
+                        <a href="datacenter.html"
+                            class="inline-flex items-center text-sm font-medium text-white px-4 py-2 rounded-lg cta-button">
+                            LEARN MORE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Service Card 2: Staffing Firm -->
+                <div class="p-8 rounded-3xl card-3d-effect flex flex-col" data-tilt data-tilt-max="8"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
+                    <div class="text-center flex-grow">
+                        <!-- GIF Icon PATH: assets/images/leadership.gif -->
+                        <img src="assets/images/leadership.gif" alt="Staffing and Leadership Icon"
+                            class="w-16 h-16 mx-auto mb-4 object-contain">
+                        <h3 class="text-xl font-semibold text-white mb-3">Staffing Firm</h3>
+                        <p class="text-gray-400 text-sm">
+                            GrayWolftek Staffing Firm is your strategic partner in building high-performing teams and
+                            managing recruitment from start to finish. We empower startups with tailored staffing
+                            solutions, helping them scale quickly and efficiently.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-center mt-auto">
+                        <a href="staffing.html"
+                            class="inline-flex items-center text-sm font-medium text-white px-4 py-2 rounded-lg cta-button">
+                            LEARN MORE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Service Card 3: Software and App Development -->
+                <div class="p-8 rounded-3xl card-3d-effect flex flex-col" data-tilt data-tilt-max="8"
+                    data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.3">
+                    <div class="text-center flex-grow">
+                        <!-- GIF Icon PATH: assets/images/software.gif -->
+                        <img src="assets/images/software.gif" alt="Software Development Icon"
+                            class="w-16 h-16 mx-auto mb-4 object-contain">
+                        <h3 class="text-xl font-semibold text-white mb-3">Software and App Development</h3>
+                        <p class="text-gray-400 text-sm">
+                            GrayWolftek delivers end-to-end software and app development services, transforming your
+                            ideas into scalable, high-quality digital solutions. From concept to deployment, we guide
+                            you through a seamless and collaborative development journey.
+                        </p>
+                    </div>
+                    <div class="mt-6 flex justify-center mt-auto">
+                        <a href="software.html"
+                            class="inline-flex items-center text-sm font-medium text-white px-4 py-2 rounded-lg cta-button">
+                            LEARN MORE
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <a href="#management"
+                class="mt-12 inline-flex items-center text-primary-accent hover:opacity-80 font-medium">
+                View Management Solutions
+                <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- HR & Management Solutions -->
+    <section id="management" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 section-separator">
+            <div class="lg:flex lg:items-center lg:space-x-12">
+
+                <div class="lg:w-1/2">
+                    <span class="text-sm font-semibold uppercase text-primary-accent">Streamline Operations</span>
+                    <!-- Enhanced 3D Text Shadow Applied Here -->
+                    <h2 class="text-4xl font-bold text-white mb-6 text-shadow-3d text-glow">Hassle-Free HR and Agile
+                        Management
+                    </h2>
+                    <p class="text-lg text-gray-400 mb-8">
+                        We handle the people, so you can focus on growth. Graywolftek takes the stress out of managing
+                        remote teams with end-to-end, streamlined solutions.
+                    </p>
+
+                    <div class="space-y-6">
+                        <!-- HR Management - NEW STYLING -->
+                        <div class="flex items-start p-4 rounded-3xl card-3d-effect">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-primary-accent flex-shrink-0 mt-1"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">End-to-End HR Management</h3>
+                                <p class="text-gray-400 text-sm mt-2">Payroll, benefits, compliance, engagement, and
+                                    performance tracking—all tailored for remote engineering teams.</p>
+                            </div>
+                        </div>
+
+                        <!-- Staff Management - NEW STYLING -->
+                        <div class="flex items-start p-4 rounded-3xl card-3d-effect">
+                            <i data-lucide="bar-chart-2" class="w-6 h-6 text-primary-accent flex-shrink-0 mt-1"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">Agile & Staff Management</h3>
+                                <p class="text-gray-400 text-sm mt-2">Implementing Agile practices for flexibility and
+                                    efficiency, plus simplified recruitment, onboarding, and HR operations.</p>
+                            </div>
+                        </div>
+
+                        <!-- Online Portal - NEW STYLING -->
+                        <div class="flex items-start p-4 rounded-3xl card-3d-effect">
+                            <i data-lucide="layout-dashboard"
+                                class="w-6 h-6 text-primary-accent flex-shrink-0 mt-1"></i>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-semibold text-white">Client Online Portal</h3>
+                                <p class="text-gray-400 text-sm mt-2">Real-time access to project updates, team
+                                    performance, and administrative tools in one intuitive place.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Placeholder on Right -->
+                <div class="lg:w-1/2 mt-12 lg:mt-0 relative">
+                    <!-- Adjusted border/shadow on the image card wrapper -->
+                    <div class="p-10 rounded-3xl border border-white/10 card-3d-effect">
+                        <!-- Mock Portal UI -->
+                        <div class="bg-gray-800/50 h-96 rounded-xl p-6 border border-white/10">
+                            <div class="flex justify-between items-center mb-4">
+                                <span class="text-lg font-bold text-white">Dashboard Overview</span>
+                                <span class="text-xs text-gray-400">Last Updated: Just Now</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Card style applied to internal dashboard elements for consistency -->
+                                <div
+                                    class="bg-white/5 p-3 rounded-xl border border-white/10 card-3d-effect hover:transform-none hover:shadow-sm">
+                                    <p class="text-sm text-gray-400">Active Engineers</p>
+                                    <p class="text-2xl font-bold text-white">42</p>
+                                </div>
+                                <div
+                                    class="bg-white/5 p-3 rounded-xl border border-white/10 card-3d-effect hover:transform-none hover:shadow-sm">
+                                    <p class="text-sm text-gray-400">Project Status</p>
+                                    <p class="text-2xl font-bold text-primary-accent">On Track</p>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <h4 class="text-md font-semibold text-gray-300 mb-2">Team Velocity</h4>
+                                <div class="w-full h-2 bg-gray-700 rounded-full">
+                                    <div class="h-full bg-primary-accent rounded-full" style="width: 85%;"></div>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1">85% of target capacity achieved.</p>
+                            </div>
+                            <div class="mt-6">
+                                <h4 class="text-md font-semibold text-gray-300 mb-2">Upcoming Milestones</h4>
+                                <ul class="space-y-2">
+                                    <li class="flex items-center text-gray-400 text-sm">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-primary-accent mr-2"></i>
+                                        Deploy v2.1 (Oct 25)
+                                    </li>
+                                    <li class="flex items-center text-gray-400 text-sm">
+                                        <i data-lucide="check-circle" class="w-4 h-4 text-primary-accent mr-2"></i> HR
+                                        Review Cycle (Nov 1)
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The Alpha Circle (Team Section) - Team images now use assets/team/ -->
+    <section id="teams" class="py-24 section-separator">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-sm font-semibold uppercase text-primary-accent">Leadership</span>
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h2 class="text-4xl font-bold text-white mb-10 text-shadow-3d text-glow">The Alpha Circle: Our Expertise
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+                <!-- Team Member 1: Vishal Maurya -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Vishal Maurya</h3>
+                    <p class="team-title">FOUNDER / CEO</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/vishal-maurya-aba607243/" target="_blank"
+                            class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/vishal.png" alt="Vishal Maurya - Founder and CEO" class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Vishal+Placeholder'" />
+                    </div>
+                </div>
+
+                <!-- Team Member 2: Akshay Nandanwar -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Akshay Nandanwar</h3>
+                    <p class="team-title">SENIOR DEVOPS CONSULTANT</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/akshay-nandanwar-29ba8255/" target="_blank"
+                            class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/akshay.JPG" alt="Akshay Nandanwar - Senior DevOps Consultant"
+                            class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Akshay+Placeholder'" />
+                    </div>
+                </div>
+
+                <!-- Team Member 3: Anudeep Kankipati -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Anudeep Kankipati</h3>
+                    <p class="team-title">DATA CENTER EXPERT</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/anudeep29ak/" target="_blank" class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/anudeep.JPG" alt="Anudeep Kankipati - Data Center Expert"
+                            class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Anudeep+Placeholder'" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OMEGA Section (Junior Team Members) -->
+    <section id="omega-team" class="py-24 section-separator">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <span class="text-sm font-semibold uppercase text-purple-400">New Talent</span>
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h2 class="text-4xl font-bold text-white mb-10 text-shadow-3d text-glow">OMEGA — Junior Members / New Talent
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+
+                <!-- Team Member 1: Aakash Maurya -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Aakash Maurya</h3>
+                    <p class="team-title">JUNIOR MARKETING EXECUTIVE</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/aakash-maurya-36a544278/" target="_blank"
+                            class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/Aakash Maurya.jpg" alt="Aakash Maurya - Junior Marketing Executive"
+                            class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Aakash+Placeholder'" />
+                    </div>
+                </div>
+
+                <!-- Team Member 2: Aryan Maurya -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Aryan Maurya</h3>
+                    <p class="team-title">DEVELOPER</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/aryan-maurya-0b68a732a/" target="_blank"
+                            class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/Aryan Maurya.jpg" alt="Aryan Maurya - Developer" class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Aryan+Placeholder'" />
+                    </div>
+                </div>
+
+                <!-- Team Member 3: Shreyansh Yadav -->
+                <div class="p-6 rounded-3xl card-3d-effect text-left">
+                    <h3 class="team-name">Shreyansh Yadav</h3>
+                    <p class="team-title">DEVELOPER</p>
+
+                    <!-- Social Links -->
+                    <div class="flex space-x-3 mt-4 mb-6">
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <span class="social-icon-btn cursor-default">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/in/shreyansh-yadav-a9b72b384/" target="_blank"
+                            class="social-icon-btn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                    </div>
+
+                    <!-- Image Container: FIX ENSURES UNIFORM SIZE -->
+                    <div class="team-image-container mb-0">
+                        <img src="assets/team/Shreyansh Yadav.jpg" alt="Shreyansh Yadav - Developer"
+                            class="team-image-fit"
+                            onerror="this.onerror=null; this.src='https://placehold.co/600x600/f3f4f6/4f46e5?text=Shreyansh+Placeholder'" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center section-separator">
+            <span class="text-sm font-semibold uppercase text-primary-accent">Our Foundation</span>
+            <!-- Enhanced 3D Text Shadow Applied Here -->
+            <h2 class="text-4xl font-bold text-white mb-6 text-shadow-3d text-glow">The Graywolftek Philosophy</h2>
+
+            <p class="text-lg text-gray-400 max-w-4xl mx-auto">
+                Inspired by the astute and collaborative nature of gray wolves, Graywolftek leads the pack in providing
+                exceptional technology solutions. Just as wolves collaborate seamlessly, we bring a unified approach to
+                organizing and elevating your technology requirements.
+            </p>
+
+            <div class="mt-12 flex justify-center">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl">
+                    <div class="card-3d-effect p-8 reveal" data-tilt data-tilt-max="10" data-tilt-speed="400"
+                        data-tilt-glare data-tilt-max-glare="0.5">
+                        <div class="h-12 w-12 bg-indigo-500/20 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="target" class="w-6 h-6 text-primary-accent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Strategic Partnership</h3>
+                        <p class="text-gray-400">
+                            We don't just provide services—we become an extension of your team, understanding your
+                            vision and working collaboratively to achieve your goals.
+                        </p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="card-3d-effect p-8 reveal" data-tilt data-tilt-max="10" data-tilt-speed="400"
+                        data-tilt-glare data-tilt-max-glare="0.5">
+                        <div class="h-12 w-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="zap" class="w-6 h-6 text-purple-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Innovation First</h3>
+                        <p class="text-gray-400">
+                            Leveraging cutting-edge technologies and agile methodologies to deliver solutions that keep
+                            you ahead of the competition.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="card-3d-effect p-8 reveal" data-tilt data-tilt-max="10" data-tilt-speed="400"
+                        data-tilt-glare data-tilt-max-glare="0.5">
+                        <div class="h-12 w-12 bg-pink-500/20 rounded-lg flex items-center justify-center mb-6">
+                            <i data-lucide="shield-check" class="w-6 h-6 text-pink-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Quality Assured</h3>
+                        <p class="text-gray-400">
+                            Rigorous quality standards and transparent processes ensure reliable, scalable solutions
+                            that stand the test of time.
+                        </p>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Strategic Growth Partner Section -->
+    <section class="py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-panel rounded-2xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8 card-3d-effect"
+                data-tilt data-tilt-max="3" data-tilt-speed="400" data-tilt-glare data-tilt-max-glare="0.1">
+
+                <!-- Logo Side -->
+                <div class="flex-shrink-0 text-center md:text-left">
+                    <span
+                        class="text-xs font-semibold uppercase text-primary-accent tracking-wider block mb-3">Strategic
+                        Growth Partner</span>
+                    <img src="assets/images/skitreai.svg" alt="Skitre.ai Logo"
+                        class="h-12 md:h-16 w-auto mx-auto md:mx-0 opacity-90 hover:opacity-100 transition duration-300">
+                </div>
+
+                <!-- Content Side -->
+                <div class="text-center md:text-left md:border-l md:border-white/10 md:pl-8">
+                    <p class="text-gray-300 text-lg leading-relaxed">
+                        "GrayWolfTek partners with <span class="text-white font-semibold">Skitre.ai</span> to drive
+                        significant impact in the education and skilling ecosystem. Our focus areas—Business Strategy,
+                        Business Development, and Education—are applied to expand skills training, enhance
+                        employability, and build the strategic relationships necessary to accelerate Skitre.ai’s mission
+                        and deliver real-world difference."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Contact Footer -->
+    <footer id="contact" class="py-20 bg-gray-900/50 border-t border-gray-800 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-extrabold text-white mb-4 text-glow">Ready to Build Your Elite Team?</h2>
+                <p class="text-xl text-gray-400 max-w-3xl mx-auto">
+                    Let Graywolftek be the alpha in streamlining your business processes. Schedule your free consulting
+                    call today.
+                </p>
+                <div class="mt-8">
+                    <a href="mailto:info@graywolftek.com"
+                        class="px-10 py-4 text-lg font-medium rounded-lg text-white cta-button">
+                        Start the Conversation
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-gray-800 pt-10 text-center md:text-left reveal">
+
+                <!-- Contact Info -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-semibold text-white">Connect with Us</h4>
+                    <div class="flex items-center justify-center md:justify-start text-gray-400">
+                        <i data-lucide="mail" class="w-5 h-5 mr-3 text-primary-accent"></i>
+                        <a href="mailto:info@graywolftek.com"
+                            class="hover:text-primary-accent transition">info@graywolftek.com</a>
+                    </div>
+                    <div class="flex items-center justify-center md:justify-start text-gray-400">
+                        <i data-lucide="phone" class="w-5 h-5 mr-3 text-primary-accent"></i>
+                        <a href="tel:+917559185780" class="hover:text-primary-accent transition">+91-7559185780</a>
+                    </div>
+                </div>
+
+                <!-- Location -->
+                <div class="space-y-4">
+                    <h4 class="text-xl font-semibold text-white">Visit Our Office</h4>
+                    <p class="text-gray-400">
+                        Usmanpur, Jalalpur Ambedkar Nagar <br>
+                        224149, India
+                    </p>
+                </div>
+
+                <!-- Logo & Copyright -->
+                <div class="space-y-4 md:text-right">
+                    <!-- Logo in footer for consistency -->
+                    <a href="#" class="flex items-center justify-center md:justify-end space-x-2">
+                        <!-- LOGO PATH: assets/images/logo.png -->
+                        <img src="assets/images/logo.png" alt="Graywolftek Main Logo" class="h-8 w-auto" />
+                        <span class="text-xl font-extrabold tracking-wider text-white">
+                            <span class="text-primary-accent text-glow">GRAY</span>WOLFTEK
+                        </span>
+                    </a>
+
+                    <!-- Social Media Links -->
+                    <div class="flex items-center justify-center md:justify-end space-x-3 mt-4">
+                        <span class="social-icon-btn cursor-default" aria-label="Twitter">
+                            <i data-lucide="twitter" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                        <a href="https://www.linkedin.com/company/graywolftek/posts/?feedView=all" target="_blank"
+                            class="social-icon-btn" aria-label="LinkedIn">
+                            <i data-lucide="linkedin" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                        <a href="https://www.instagram.com/graywolftek/" target="_blank" class="social-icon-btn"
+                            aria-label="Instagram">
+                            <i data-lucide="instagram" class="w-4 h-4 text-gray-300"></i>
+                        </a>
+                        <span class="social-icon-btn cursor-default" aria-label="Facebook">
+                            <i data-lucide="facebook" class="w-4 h-4 text-gray-300"></i>
+                        </span>
+                    </div>
+
+                    <p class="text-sm text-gray-500">&copy; 2024 Graywolftek. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu Toggle and Lucide Icons -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            const isExpanded = mobileMenu.classList.contains('hidden');
+            if (isExpanded) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenuButton.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+                lucide.createIcons();
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenuButton.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+                lucide.createIcons();
+            }
+        });
+
+        // Hide mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuButton.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+                lucide.createIcons();
+            });
+        });
+
+    </script>
+    <script>
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            revealElements.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        // Trigger once on load
+        revealOnScroll();
+    </script>
+</body>
+
+</html>
